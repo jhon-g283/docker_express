@@ -200,6 +200,7 @@ const transInsert = (infojson) => {
   var i;
   var l;
   var query_arr = "";
+  var columns_name_table = "(name,mali,tel,address)"
  
 // body部分がある場合、配列にカラムの内容を突っ込んでいく
   if (json_data !== undefined) {
@@ -222,7 +223,7 @@ const transInsert = (infojson) => {
   }
 
   // SQLのInsert文のカラム部分をセット
-  var SQL = `insert into test_table values(${query_arr});`;
+  var SQL = `insert into test_table${columns_name_table} values(${query_arr});`;
   console.log(SQL);
 
   return SQL;

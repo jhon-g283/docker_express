@@ -6,9 +6,11 @@ CREATE TABLE IF NOT EXISTS sada.masashi(
 insert into sada.masashi values('1','m');
 
 CREATE TABLE IF NOT EXISTS my_mysql_db.test_table(
+  `id` INT AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `mali` varchar(100) NOT NULL,
   `tel` varchar(100) NOT NULL,
-  `address` varchar(100) NOT NULL
+  `address` varchar(100) NOT NULL,
+   PRIMARY KEY (id)
 
 );
