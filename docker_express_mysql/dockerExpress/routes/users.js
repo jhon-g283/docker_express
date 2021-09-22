@@ -24,6 +24,7 @@ const sequelize = new Sequelize('my_mysql_db', 'root', 'root', {
 });
 
 const mysql = require("mysql2");//Mysql２インポート
+//const mysql = require("mysql2/promise");
 
 // タイミング的にMysqlを認識できないので関数ないで接続情報を設定
 // const connection = mysql.createConnection({
@@ -200,13 +201,13 @@ const transInsert = (infojson) => {
   var i;
   var l;
   var query_arr = "";
-  var columns_name_table = "(name,mali,tel,address)"
+  var columns_name_table = "(name,mail,tel,address,ordertime)"
  
 // body部分がある場合、配列にカラムの内容を突っ込んでいく
   if (json_data !== undefined) {
     for (const [key, value] of Object.entries(json_data)) {
 
-      i = value.indexOf(":");//フロントの仕様上：で文字を区切る。区切った右側が登録内容
+      i = value.indexOf(":");//フロントの仕様上「：」で文字を区切る。区切った右側が登録内容
       l = value.length;//長さ取得
       console.log(key + " " + value + " => " + value.slice(i + 1, l));
 
@@ -222,13 +223,38 @@ const transInsert = (infojson) => {
     query_arr = json_data;
   }
 
+  
+
+  let time = OrderTime();
+  query_arr = query_arr + ",'" + time + "'";
+  
+
   // SQLのInsert文のカラム部分をセット
   var SQL = `insert into test_table${columns_name_table} values(${query_arr});`;
   console.log(SQL);
 
+  
+
   return SQL;
 };
 
+//注文時間用関数
+const OrderTime= () => {
+
+var date = new Date();
+var str = date.getFullYear()
+    + '/' + ('0' + (date.getMonth() + 1)).slice(-2)
+    + '/' + ('0' + date.getDate()).slice(-2)
+    + ' ' + ('0' + date.getHours()).slice(-2)
+    + ':' + ('0' + date.getMinutes()).slice(-2)
+    + ':' + ('0' + date.getSeconds()).slice(-2)
+    + '(JST)';
+console.log("ordertime:" + str);  
+
+return str;
+
+
+};
 
 
 
