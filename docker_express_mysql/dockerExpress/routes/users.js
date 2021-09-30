@@ -47,6 +47,14 @@ router.get('/', async (req, res, next) => {
     database: "my_mysql_db"
   });
 
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); //
+  
+  res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin,Content-Type");
+
+  const sql = "select * from test_table;";
+  let get_results="";//結果格納s
+
   // res.header("Access-Control-Allow-Origin", "https://r9bkv.csb.app"); 
   try {
     await sequelize.authenticate();
@@ -57,20 +65,33 @@ router.get('/', async (req, res, next) => {
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
-  res.send('respond with a resource');
+  // res.send('respond with a resource');
 
   console.log("------start--");
  
   try{
     // await connection.connect();
-    await connection.query("SELECT user, host, plugin FROM mysql.user", function (
+    //"SELECT user, host, plugin FROM mysql.user"
+    await connection.query(sql, function (
         error,
         results,
         fields
       ) {
         console.log("------00000--");
     
-        console.log(results);
+        //console.log(results);
+        get_results=results;
+        if(get_results===""){
+          console.log("no data!!");
+        }else{
+          console.log("get data!! from database");
+          console.log("-----");
+          
+           console.log(get_results);
+
+        }
+       
+        res.send(results);
         
         console.log("end!!");
         // console.log(error);
@@ -83,12 +104,14 @@ router.get('/', async (req, res, next) => {
     // );
 
     console.log("ok!!");
+    console.log(get_results);
     // res.send('respond SQL OK')
   }catch(e){
     console.log(e);
   }
   
 
+console.log(get_results);
 
 
 });
